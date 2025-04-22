@@ -28,7 +28,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'username' => 'required|string',
+            'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
@@ -37,20 +37,22 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $remember)) {
             // Update last login timestamp
             $user = Auth::user();
-            $user->last_login_at = now();
-            $user->save();
+            if ($user->last_login_at) {
+                $user->last_login_at = now();
+                $user->save();
+            }
             
             $request->session()->regenerate();
             
-            Log::info('User logged in', ['username' => $credentials['username']]);
+            Log::info('User logged in', ['email' => $credentials['email']]);
             
             return redirect()->intended(route('dashboard'));
         }
 
-        Log::warning('Failed login attempt', ['username' => $credentials['username'], 'ip' => $request->ip()]);
+        Log::warning('Failed login attempt', ['email' => $credentials['email'], 'ip' => $request->ip()]);
         
         throw ValidationException::withMessages([
-            'username' => [__('auth.failed')],
+            'email' => [__('auth.failed')],
         ]);
     }
 
@@ -62,7 +64,10 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        Log::info('User logged out', ['username' => Auth::user()->username]);
+        $user = Auth::user();
+        $email = $user ? $user->email : 'unknown';
+        
+        Log::info('User logged out', ['email' => $email]);
         
         Auth::logout();
         

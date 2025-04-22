@@ -3,226 +3,258 @@
 @section('title', 'Dashboard - Webhook GPT')
 
 @section('content')
-<div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
-                <div class="card-header p-3 pt-2">
-                    <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
-                        <i class="fas fa-question-circle opacity-10"></i>
-                    </div>
-                    <div class="text-end pt-1">
-                        <p class="text-sm mb-0 text-capitalize">Total QnA</p>
-                        <h4 class="mb-0">{{ $totalQna }}</h4>
-                    </div>
-                </div>
-                <hr class="dark horizontal my-0">
-                <div class="card-footer p-3">
-                    <p class="mb-0"><span class="text-success text-sm font-weight-bolder">{{ $activeQna }}</span> QnA aktif</p>
-                </div>
+<div class="dashboard-header">
+    <h1 class="header-title">Dashboard</h1>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <i class="fas fa-question-circle"></i>
             </div>
+            <div class="stat-title">Total QnA</div>
         </div>
-        
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
-                <div class="card-header p-3 pt-2">
-                    <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
-                        <i class="fas fa-comments opacity-10"></i>
-                    </div>
-                    <div class="text-end pt-1">
-                        <p class="text-sm mb-0 text-capitalize">Total Interaksi</p>
-                        <h4 class="mb-0">{{ $totalInteractions }}</h4>
-                    </div>
-                </div>
-                <hr class="dark horizontal my-0">
-                <div class="card-footer p-3">
-                    <p class="mb-0">Sejak awal penggunaan</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-            <div class="card">
-                <div class="card-header p-3 pt-2">
-                    <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
-                        <i class="fas fa-database opacity-10"></i>
-                    </div>
-                    <div class="text-end pt-1">
-                        <p class="text-sm mb-0 text-capitalize">Jawaban Manual</p>
-                        <h4 class="mb-0">{{ $manualResponses }}</h4>
-                    </div>
-                </div>
-                <hr class="dark horizontal my-0">
-                <div class="card-footer p-3">
-                    <p class="mb-0">{{ $manualPercentage }}% dari total interaksi</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-xl-3 col-sm-6">
-            <div class="card">
-                <div class="card-header p-3 pt-2">
-                    <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
-                        <i class="fas fa-robot opacity-10"></i>
-                    </div>
-                    <div class="text-end pt-1">
-                        <p class="text-sm mb-0 text-capitalize">Jawaban AI</p>
-                        <h4 class="mb-0">{{ $aiResponses }}</h4>
-                    </div>
-                </div>
-                <hr class="dark horizontal my-0">
-                <div class="card-footer p-3">
-                    <p class="mb-0">{{ 100 - $manualPercentage }}% dari total interaksi</p>
-                </div>
-            </div>
-        </div>
+        <div class="stat-value">{{ $totalQna ?? 0 }}</div>
+        <div class="stat-subtitle">{{ $activeQna ?? 0 }} QnA aktif</div>
     </div>
     
-    <div class="row mt-4">
-        <div class="col-lg-7 mb-lg-0 mb-4">
-            <div class="card z-index-2 h-100">
-                <div class="card-header pb-0 pt-3 bg-transparent">
-                    <h6 class="text-capitalize">Interaksi 7 Hari Terakhir</h6>
-                    <p class="text-sm mb-0">
-                        <i class="fa fa-arrow-up text-success"></i>
-                        <span class="font-weight-bold">Statistik</span> interaksi chatbot
-                    </p>
-                </div>
-                <div class="card-body p-3">
-                    <div class="chart">
-                        <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <div class="stat-title">Total Interaksi</div>
+        </div>
+        <div class="stat-value">{{ $totalInteractions ?? 0 }}</div>
+        <div class="stat-subtitle">Sejak awal penggunaan</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="stat-title">Jawaban Manual</div>
+        </div>
+        <div class="stat-value">{{ $manualResponses ?? 0 }}</div>
+        <div class="stat-subtitle">{{ $manualPercentage ?? 0 }}% dari total interaksi</div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-header">
+            <div class="stat-icon">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="stat-title">Jawaban AI</div>
+        </div>
+        <div class="stat-value">{{ $aiResponses ?? 0 }}</div>
+        <div class="stat-subtitle">{{ 100 - ($manualPercentage ?? 0) }}% dari total interaksi</div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="section-header">
+        <div class="section-icon">
+            <i class="fas fa-clock"></i>
+        </div>
+        <h2 class="section-title">Interaksi Terbaru</h2>
+    </div>
+    
+    <div class="card">
+        <div class="interaction-list">
+            @if(isset($recentInteractions) && count($recentInteractions) > 0)
+                @foreach($recentInteractions as $interaction)
+                <div class="interaction-item">
+                    <div class="interaction-question">{{ \Illuminate\Support\Str::limit($interaction->question, 100) }}</div>
+                    <div class="interaction-meta">
+                        <span><i class="fas fa-{{ $interaction->is_manual ? 'database' : 'robot' }}"></i> {{ $interaction->source }}</span>
+                        <span><i class="far fa-clock"></i> {{ $interaction->created_at->diffForHumans() }}</span>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-5">
-            <div class="card">
-                <div class="card-header pb-0 p-3">
-                    <h6 class="mb-0">Interaksi Terbaru</h6>
+                @endforeach
+            @else
+                <div class="no-interactions">
+                    <p>Belum ada interaksi</p>
                 </div>
-                <div class="card-body p-3">
-                    <ul class="list-group">
-                        @forelse($recentInteractions as $interaction)
-                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                            <div class="d-flex align-items-center">
-                                <div class="icon icon-shape icon-sm me-3 bg-gradient-{{ $interaction->is_manual ? 'success' : 'dark' }} shadow text-center">
-                                    <i class="fas fa-{{ $interaction->is_manual ? 'database' : 'robot' }} text-white opacity-10"></i>
-                                </div>
-                                <div class="d-flex flex-column">
-                                    <h6 class="mb-1 text-dark text-sm">{{ Str::limit($interaction->question, 50) }}</h6>
-                                    <span class="text-xs">{{ $interaction->created_at->diffForHumans() }} via {{ $interaction->source }}</span>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center text-sm">
-                                <a href="{{ route('logs.show', $interaction) }}" class="btn btn-link text-dark px-3 mb-0">
-                                    <i class="fas fa-eye text-dark me-2"></i> Detail
-                                </a>
-                            </div>
-                        </li>
-                        @empty
-                        <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                            <div class="d-flex flex-column">
-                                <h6 class="mb-1 text-dark text-sm">Belum ada interaksi</h6>
-                            </div>
-                        </li>
-                        @endforelse
-                    </ul>
-                    
-                    <div class="text-center mt-3">
-                        <a href="{{ route('logs.index') }}" class="btn btn-outline-primary btn-sm mb-0">Lihat Semua</a>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="section-header">
+        <div class="section-icon">
+            <i class="fas fa-bolt"></i>
+        </div>
+        <h2 class="section-title">Aksi Cepat</h2>
+    </div>
+    
+    <div class="actions">
+        <a href="{{ route('qna.create') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Tambah QnA Baru
+        </a>
+        <a href="{{ route('logs.index') }}" class="btn btn-primary">
+            <i class="fas fa-list"></i> Lihat Semua Log
+        </a>
     </div>
 </div>
 @endsection
 
-@push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var ctx = document.getElementById("chart-line").getContext("2d");
-        
-        var gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
-        gradientStroke.addColorStop(1, 'rgba(94, 114, 228, 0.2)');
-        gradientStroke.addColorStop(0.2, 'rgba(94, 114, 228, 0.0)');
-        gradientStroke.addColorStop(0, 'rgba(94, 114, 228, 0)');
-        
-        new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: {!! $chartLabels !!},
-                datasets: [{
-                    label: "Interaksi",
-                    tension: 0.4,
-                    borderWidth: 0,
-                    pointRadius: 0,
-                    borderColor: "#5e72e4",
-                    backgroundColor: gradientStroke,
-                    borderWidth: 3,
-                    fill: true,
-                    data: {!! $chartData !!},
-                    maxBarThickness: 6
-                }],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false,
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
-                scales: {
-                    y: {
-                        grid: {
-                            drawBorder: false,
-                            display: true,
-                            drawOnChartArea: true,
-                            drawTicks: false,
-                            borderDash: [5, 5]
-                        },
-                        ticks: {
-                            display: true,
-                            padding: 10,
-                            color: '#fbfbfb',
-                            font: {
-                                size: 11,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                    x: {
-                        grid: {
-                            drawBorder: false,
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                            borderDash: [5, 5]
-                        },
-                        ticks: {
-                            display: true,
-                            color: '#ccc',
-                            padding: 20,
-                            font: {
-                                size: 11,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                },
-            },
-        });
-    });
-</script>
-@endpush
+@section('styles')
+<style>
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+    
+    .stat-card {
+        background-color: #1e293b;
+        border: 1px solid #334155;
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stat-card::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        width: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+    
+    .stat-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .stat-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(6, 182, 212, 0.1);
+        color: var(--primary);
+        border-radius: 0.5rem;
+        margin-right: 1rem;
+    }
+    
+    .stat-title {
+        font-size: 0.875rem;
+        color: var(--gray);
+    }
+    
+    .stat-value {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--light);
+        margin-bottom: 0.25rem;
+    }
+    
+    .stat-subtitle {
+        color: var(--gray);
+        font-size: 0.875rem;
+    }
+    
+    .section {
+        margin-bottom: 2.5rem;
+    }
+    
+    .section-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-icon {
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(6, 182, 212, 0.1);
+        color: var(--primary);
+        border-radius: 0.5rem;
+        margin-right: 0.75rem;
+    }
+    
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--light);
+    }
+    
+    .interaction-list {
+        padding: 0;
+    }
+    
+    .interaction-item {
+        padding: 1.25rem;
+        border-bottom: 1px solid #334155;
+        transition: background-color 0.2s;
+    }
+    
+    .interaction-item:hover {
+        background-color: rgba(6, 182, 212, 0.05);
+    }
+    
+    .interaction-item:last-child {
+        border-bottom: none;
+    }
+    
+    .interaction-question {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--light);
+    }
+    
+    .interaction-meta {
+        display: flex;
+        font-size: 0.75rem;
+        color: var(--gray);
+    }
+    
+    .interaction-meta span {
+        display: flex;
+        align-items: center;
+        margin-right: 1rem;
+    }
+    
+    .interaction-meta i {
+        margin-right: 0.375rem;
+    }
+    
+    .no-interactions {
+        padding: 2.5rem;
+        text-align: center;
+        color: var(--gray);
+        font-size: 0.875rem;
+    }
+    
+    .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    @media (max-width: 992px) {
+        .stats-grid {
+            grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+        }
+    }
+</style>
+@endsection
